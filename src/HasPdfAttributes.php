@@ -19,6 +19,21 @@ trait HasPdfAttributes
      */
     private $printBackground = false;
 
+	/**
+	 * Generate a tagged PDF
+	 *
+	 * @var bool
+	 */
+	private $generateTaggedPDF = false;
+	
+	/**
+	 * Generate a document outline in the PDF
+	 * Generating a document outline at the moment requires a tagged pdf!
+	 *
+	 * @var bool
+	 */
+	private $generateDocumentOutline = false;
+
     /**
      * Give any CSS @page size declared in the page priority over what is declared
      * in width and height or format options.
@@ -239,6 +254,23 @@ trait HasPdfAttributes
 
         return $this;
     }
+    
+    public function setGenerateTaggedPDF(bool $generateTaggedPDF): Chrome2Pdf
+    {
+        $this->generateTaggedPDF = $generateTaggedPDF;
+        
+        return $this;
+    }
+    
+	public function setGenerateDocumentOutline(bool $generateOutline): Chrome2Pdf
+	{
+		$this->generateDocumentOutline = $generateOutline;
+		
+		// generating a document outline at the moment requires a tagged pdf
+		$this->generateTaggedPDF = $generateOutline;
+		
+		return $this;
+	}
 
     public function setPageRanges(?string $pageRanges): Chrome2Pdf
     {

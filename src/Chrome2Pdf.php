@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use ChromeDevtoolsProtocol\Context;
 use ChromeDevtoolsProtocol\ContextInterface;
 use ChromeDevtoolsProtocol\Instance\Launcher;
+use ChromeDevtoolsProtocol\Model\Page\EnableRequest;
 use ChromeDevtoolsProtocol\Model\Page\NavigateRequest;
 use ChromeDevtoolsProtocol\Model\Page\PrintToPDFRequest;
 use ChromeDevtoolsProtocol\Model\Page\SetLifecycleEventsEnabledRequest;
@@ -197,7 +198,7 @@ class Chrome2Pdf
                     $devtools->emulation()->setEmulatedMedia($ctx, SetEmulatedMediaRequest::builder()->setMedia($this->emulateMedia)->build());
                 }
 
-                $devtools->page()->enable($ctx);
+                $devtools->page()->enable($ctx, EnableRequest::builder()->build());
                 $devtools->page()->setLifecycleEventsEnabled($ctx, SetLifecycleEventsEnabledRequest::builder()->setEnabled(true)->build());
                 $devtools->page()->navigate($ctx, NavigateRequest::builder()->setUrl('file://' . $filename)->build());
                 $devtools->page()->awaitLoadEventFired($ctx);
@@ -303,6 +304,18 @@ class Chrome2Pdf
             $pdfOptions->headerTemplate = $this->header;
             $pdfOptions->footerTemplate = $this->footer;
         }
+
+		if($this->generateTaggedPDF)
+		{
+			$pdfOptions->generateTaggedPDF = true;
+		}
+		
+		if($this->generateDocumentOutline)
+		{
+			$pdfOptions->generateDocumentOutline = true;
+			// generating a document outline at the moment requires a tagged pdf
+			$pdfOptions->generateTaggedPDF = true;
+		}
 
         return $pdfOptions;
     }
