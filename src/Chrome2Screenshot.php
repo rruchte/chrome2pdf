@@ -9,6 +9,7 @@ use InvalidArgumentException;
 use ChromeDevtoolsProtocol\Context;
 use ChromeDevtoolsProtocol\ContextInterface;
 use ChromeDevtoolsProtocol\Instance\Launcher;
+use ChromeDevtoolsProtocol\Model\Page\EnableRequest;
 use ChromeDevtoolsProtocol\Model\Page\NavigateRequest;
 use ChromeDevtoolsProtocol\Model\Page\CaptureScreenshotRequest;
 use ChromeDevtoolsProtocol\Model\Page\SetLifecycleEventsEnabledRequest;
@@ -198,7 +199,7 @@ class Chrome2Screenshot
 					$devtools->emulation()->setEmulatedMedia($ctx, SetEmulatedMediaRequest::builder()->setMedia($this->emulateMedia)->build());
 				}
 				
-				$devtools->page()->enable($ctx);
+				$devtools->page()->enable($ctx, EnableRequest::builder()->build());
 				$devtools->page()->setLifecycleEventsEnabled($ctx, SetLifecycleEventsEnabledRequest::builder()->setEnabled(true)->build());
 				$devtools->page()->navigate($ctx, NavigateRequest::builder()->setUrl('file://' . $filename)->build());
 				$devtools->page()->awaitLoadEventFired($ctx);
